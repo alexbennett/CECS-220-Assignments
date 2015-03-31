@@ -1,0 +1,108 @@
+/* Einstein Applet */
+
+import javax.swing.JApplet;
+import java.awt.*;
+
+public class Einstein extends JApplet
+{
+    public void paint(Graphics page)
+    {
+        page.drawRect(50, 50, 40, 40); // square
+        page.drawRect(60, 80, 225, 30); // rectangle
+        page.drawOval(275, 100, 20, 20); // circle
+        page.drawLine(35, 60, 100, 120); // line
+
+        page.drawString("Out of clutter, find simplicity.", 110, 70);
+        page.drawString("Albert Einstein", 130, 100);
+    }
+}
+
+/* Change Conversion */
+
+import java.util.Scanner;
+
+public class ChangeConversion
+{
+    public static void main(String[] args)
+    {
+        // Define variables
+        int quarters, dimes, nickles, pennies, totalCents;
+
+        // Initiate scanner for accepting values
+        Scanner scanner = new Scanner(System.in);
+
+        // Accept the values from the user
+        System.out.print("Enter number of quarters (integers only): ");
+        quarters = scanner.nextInt();
+        System.out.print("Enter number of dimes (integers only): ");
+        dimes = scanner.nextInt();
+        System.out.print("Enter number of nickles (integers only): ");
+        nickles = scanner.nextInt();
+        System.out.print("Enter number of pennies (integers only): ");
+        pennies = scanner.nextInt();
+
+        // Do the conversion
+        totalCents = quarters * 25 + dimes * 10 + nickles * 5 + pennies;
+
+        // Done! Print it all out
+        System.out.println("Thanks! You have a total of $" + ((double) totalCents / 100) + "!");
+    }
+}
+
+/* Square Calculator */
+
+import java.util.Scanner;
+
+public class SquareCalculator
+{
+    public static void main(String[] args)
+    {
+        // Define variables
+        int length, perimeter, area;
+
+        // Initiate scanner for accepting values
+        Scanner scanner = new Scanner(System.in);
+
+        // Accept the values from the user
+        System.out.print("Please enter the length of your squares side (integers only): ");
+        length = scanner.nextInt();
+
+        // Calculate
+        perimeter = length * 4;
+        area = length * length;
+
+        // Done! Print it all out
+        System.out.println("Thanks! Your square has a perimeter of " + perimeter + " and an area of " + area + "!");
+    }
+}
+
+
+/* Time Conversion */
+
+import java.util.Scanner;
+
+public class TimeConversion
+{
+    public static void main(String[] args)
+    {
+        // Define variables
+        int hours, minutes, seconds, totalSeconds;
+
+        // Initiate scanner for accepting values
+        Scanner scanner = new Scanner(System.in);
+
+        // Accept the values from the user
+        System.out.print("Enter number of hours (integers only): ");
+        hours = scanner.nextInt();
+        System.out.print("Enter number of minutes (integers only): ");
+        minutes = scanner.nextInt();
+        System.out.print("Enter number of seconds (integers only): ");
+        seconds = scanner.nextInt();
+
+        // Do the conversion
+        totalSeconds = (hours * 60 + minutes) * 60 + seconds;
+
+        // Done! Print it all out
+        System.out.println("Thanks! " + hours + " hour(s), " + minutes + " minute(s), and " + seconds + " second(s) is a total of " + totalSeconds + " second(s).");
+    }
+}

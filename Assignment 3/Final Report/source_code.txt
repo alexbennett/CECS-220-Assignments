@@ -1,0 +1,508 @@
+/* ---------------------------------------------
+ * Problem #1 (4.8)
+ * ---------------------------------------------
+ */
+
+package problem_1;
+
+public class Die
+{
+    private final int MAX = 6; // maximum face value
+    private int faceValue; // current value showing on the die
+
+    public Die()
+    {
+        faceValue = 1;
+    }
+
+    public int roll()
+    {
+        faceValue = (int) (Math.random() * MAX) + 1;
+        return faceValue;
+    }
+
+    public void setFaceValue(int value)
+    {
+        faceValue = value;
+    }
+
+    public int getFaceValue()
+    {
+        return faceValue;
+    }
+
+    public String toString()
+    {
+        String result = Integer.toString(faceValue);
+        return result;
+    }
+}
+
+package problem_1;
+
+public class PairOfDice
+{
+    private Die dieOne, dieTwo;
+
+    public PairOfDice()
+    {
+        dieOne = new Die();
+        dieTwo = new Die();
+    }
+
+    public int getDieOneValue()
+    {
+        return dieOne.getFaceValue();
+    }
+
+    public int getDieTwoValue()
+    {
+        return dieTwo.getFaceValue();
+    }
+
+    public void setDieOneValue(int value)
+    {
+        dieOne.setFaceValue(cleanValue(value));
+    }
+
+    public void setDieTwoValue(int value)
+    {
+        dieTwo.setFaceValue(cleanValue(value));
+    }
+
+    public void roll()
+    {
+        dieOne.roll();
+        dieTwo.roll();
+    }
+
+    public int sum()
+    {
+        return getDieOneValue() + getDieTwoValue();
+    }
+
+    private int cleanValue(int value)
+    {
+        return value > 6 ? 6 : value < 1 ? 1 : value;
+    }
+}
+
+package problem_1;
+
+public class RollingDice2
+{
+    public static void main(String[] args)
+    {
+        PairOfDice pairOfDice = new PairOfDice();
+
+        // Roll
+        System.out.println("Rolling dice...");
+        pairOfDice.roll();
+
+        // Display values and sum
+        System.out.println("Value of die 1: " + pairOfDice.getDieOneValue());
+        System.out.println("Value of die 2: " + pairOfDice.getDieTwoValue());
+        System.out.println("Sum: " + pairOfDice.sum());
+
+        // Set values manually and sum
+        pairOfDice.setDieOneValue(6);
+        pairOfDice.setDieTwoValue(6);
+        System.out.println("Values of both die set to 6.");
+        System.out.println("Sum: " + pairOfDice.sum());
+
+        // All done
+        System.out.println("All done!");
+    }
+}
+
+/* ---------------------------------------------
+ * Problem #2 (4.13)
+ * ---------------------------------------------
+ */
+
+package problem_2;
+import javax.swing.JFrame;
+
+public class Fahrenheit
+{
+    public static void main(String[] args)
+    {
+        JFrame frame = new JFrame("Farm");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        FahrenheitPanel panel = new FahrenheitPanel();
+        frame.getContentPane().add(panel);
+        frame.pack();
+        frame.setVisible(true);
+    }
+}
+
+package problem_2;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class FahrenheitPanel extends JPanel
+{
+    private JButton calculateButton;
+    private JLabel inputLabel, outputLabel, resultLabel;
+    private JTextField fahrenheit;
+
+    public FahrenheitPanel()
+    {
+        // Create components
+        calculateButton = new JButton("Calculate");
+        inputLabel = new JLabel("Enter Farm temperature:");
+        outputLabel = new JLabel("Temperature in Celsius: ");
+        resultLabel = new JLabel("---");
+        fahrenheit = new JTextField(5);
+
+        // Add listeners
+        TempListener listener = new TempListener();
+        calculateButton.addActionListener(listener);
+        fahrenheit.addActionListener(listener);
+
+        // Add to view
+        add(inputLabel);
+        add(fahrenheit);
+        add(calculateButton);
+        add(outputLabel);
+        add(resultLabel);
+
+        // Finish render
+        setPreferredSize(new Dimension(425, 75));
+        setBackground(Color.yellow);
+    }
+
+    private class TempListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent event)
+        {
+            int fahrenheitTemp, celsiusTemp;
+            String text = fahrenheit.getText();
+            fahrenheitTemp = Integer.parseInt(text);
+            celsiusTemp = (fahrenheitTemp - 32) * 5 / 9;
+            resultLabel.setText(Integer.toString(celsiusTemp));
+        }
+    }
+}
+
+/* ---------------------------------------------
+ * Problem #3 (5.10)
+ * ---------------------------------------------
+ */
+
+package problem_3;
+
+public class Die
+{
+    private final int MAX = 6; // maximum face value
+    private int faceValue; // current value showing on the die
+
+    public Die()
+    {
+        faceValue = 1;
+    }
+
+    public int roll()
+    {
+        faceValue = (int) (Math.random() * MAX) + 1;
+        return faceValue;
+    }
+
+    public void setFaceValue(int value)
+    {
+        if(value < 0 || value > MAX) return;
+
+        faceValue = value;
+    }
+
+    public int getFaceValue()
+    {
+        return faceValue;
+    }
+
+    public String toString()
+    {
+        String result = Integer.toString(faceValue);
+        return result;
+    }
+}
+
+package problem_3;
+
+public class DieTest
+{
+    public static void main(String[] args)
+    {
+        // Create new die
+        Die die = new Die();
+
+        // Roll and display the number
+        die.roll();
+        System.out.println("The die landed on " + die.getFaceValue() + ".");
+
+        // Attempt to set value larger than 6 and display it
+        die.setFaceValue(999);
+        System.out.println("Attempted to set the die value to 999... the value is still " + die.getFaceValue() + ".");
+
+        // Attempt to set value less than 0 and display it
+        die.setFaceValue(-999);
+        System.out.println("Attempted to set the die value to -999... the value is still " + die.getFaceValue() + ".");
+    }
+}
+
+/* ---------------------------------------------
+ * Problem #4 (5.16)
+ * ---------------------------------------------
+ */
+
+package problem_4;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class TextStats
+{
+    public static void main(String[] args)
+    {
+        // Create frame
+        JFrame frame = new JFrame("Text Statistics");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Create panels
+        StatPanel statPanel = new StatPanel();
+
+        // Miscellaneous styling
+        statPanel.setBackground(Color.LIGHT_GRAY);
+        frame.setPreferredSize(new Dimension(370, 165));
+
+        // Display
+        frame.getContentPane().add(statPanel);
+        frame.pack();
+        frame.setVisible(true);
+    }
+}
+
+package problem_4;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class StatPanel extends JPanel
+{
+    private StatDisplayPanel statDisplayPanel;
+    private JButton calculateButton;
+    private JTextArea inputTextArea;
+
+    public StatPanel()
+    {
+        // Create statistic display panel
+        statDisplayPanel = new StatDisplayPanel();
+        statDisplayPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Statistics"), new EmptyBorder(10, 10, 10, 10)));
+        add(statDisplayPanel);
+
+        // Create components
+        calculateButton = new JButton("Calculate");
+        inputTextArea = new JTextArea("", 2, 20);
+
+        // Add listeners
+        StatListener listener = new StatListener();
+        calculateButton.addActionListener(listener);
+
+        // Add to view
+        add(inputTextArea);
+        add(calculateButton);
+    }
+
+    private class StatListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent event)
+        {
+            // Button pressed
+            statDisplayPanel.updateString(inputTextArea.getText());
+        }
+    }
+}
+
+package problem_4;
+import javax.swing.*;
+import java.awt.*;
+
+public class StatDisplayPanel extends JPanel
+{
+    private JLabel numWordsLabel, numWords, avgLengthLabel, avgLength;
+
+    public StatDisplayPanel()
+    {
+        // Set the layout
+        setLayout(new GridLayout(3, 2));
+        setBackground(Color.LIGHT_GRAY);
+
+        // Create components
+        numWordsLabel = new JLabel("Number of words: ");
+        numWords = new JLabel("no words entered", SwingConstants.RIGHT);
+        avgLengthLabel = new JLabel("Average word length: ");
+        avgLength = new JLabel("no words entered", SwingConstants.RIGHT);
+
+        // Add to view
+        add(numWordsLabel);
+        add(numWords);
+        add(avgLengthLabel);
+        add(avgLength);
+    }
+
+    public void updateString(String string)
+    {
+        // Split to an array
+        String words[] = string.split(" ");
+
+        // Find average word length
+        int avgWordLength = 0;
+        for(String word : words) avgWordLength += word.length();
+        avgWordLength /= words.length;
+
+        // Update labels
+        numWords.setText("" + words.length);
+        avgLength.setText("" + avgWordLength);
+
+    }
+}
+
+/* ---------------------------------------------
+ * Problem #5 (6.9)
+ * ---------------------------------------------
+ */
+
+package problem_5;
+
+import java.util.Scanner;
+
+public class VowelCounter
+{
+    public static void main(String[] args)
+    {
+        // Define variables
+        String string;
+        int consonantCount = 0, aCount = 0, eCount = 0, iCount = 0, oCount = 0, uCount = 0;
+
+        // Initiate scanner for accepting values
+        Scanner scanner = new Scanner(System.in);
+
+        // Accept the values from the user
+        System.out.print("Enter a string: ");
+        string = scanner.nextLine();
+
+        // Get rid of everything except alphabetic characters
+        string = string.replaceAll("[^A-Za-z]", "");
+
+        // Calculate
+        for(char character : string.toLowerCase().toCharArray())
+        {
+            switch(character)
+            {
+                case 'a':
+                    aCount++;
+                    break;
+                case 'e':
+                    eCount++;
+                    break;
+                case 'i':
+                    iCount++;
+                    break;
+                case 'o':
+                    oCount++;
+                    break;
+                case 'u':
+                    uCount++;
+                    break;
+                default:
+                    consonantCount++;
+                    break;
+            }
+        }
+
+        // Output counts
+        System.out.println("Your string has " + aCount + " A(s), " + eCount + " E(s), " + iCount + " I(s), " + oCount + " O(s), " + uCount + " U(s), and " + consonantCount + " other consonants.");
+    }
+}
+
+/* ---------------------------------------------
+ * Problem #6 (6.18)
+ * ---------------------------------------------
+ */
+
+package problem_6;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class Farm
+{
+    public static void main(String[] args)
+    {
+        // Create the window
+        JFrame frame = new JFrame("Farm");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Create the scene
+        Scene scene = new Scene();
+        scene.setVisible(true);
+
+        // Add scene to the frame
+        frame.add(scene);
+
+        // Set size
+        frame.setPreferredSize(new Dimension(500, 350));
+
+        // Done
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    static class Scene extends JPanel
+    {
+        @Override
+        public void paintComponent(Graphics graphics)
+        {
+            super.paintComponent(graphics);
+            doDrawing(graphics);
+        }
+
+        private void doDrawing(Graphics graphics)
+        {
+            // Define 2D graphics
+            Graphics2D graphics2D = (Graphics2D) graphics;
+
+            // Set sky color
+            setBackground(Color.cyan);
+
+            // Draw sun
+            graphics2D.setColor(Color.yellow);
+            graphics2D.fillOval(-75, -75, 150, 150);
+
+            // Now draw the house
+            graphics2D.setColor(Color.white);
+            graphics2D.fillRect(125, 125, 212, 300);
+            graphics.setColor(Color.darkGray);
+            int[] xPoints = {115, 230, 345};
+            int[] yPoints = {125, 50, 125};
+            graphics2D.fillPolygon(xPoints, yPoints, 3);
+
+            // Draw grass
+            graphics2D.setColor(Color.green);
+            graphics2D.fillRect(0, 150, 500, 200);
+
+            // Draw fence last
+            graphics2D.setColor(new Color(160, 130, 75));
+            graphics2D.fillRect(0, 80, 500, 40);
+            graphics2D.fillRect(0, 140, 500, 40);
+            graphics2D.fillRect(0, 200, 500, 40);
+            graphics2D.fillRect(0, 260, 500, 40);
+            graphics2D.fillRect(50, 60, 50, 290);
+            graphics2D.fillRect(360, 60, 50, 290);
+        }
+    }
+}

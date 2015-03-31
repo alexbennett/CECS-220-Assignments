@@ -1,0 +1,34 @@
+package problem_1;
+
+public class Die
+{
+    private final int MAX = 6; // maximum face value
+    private int faceValue; // current value showing on the die
+
+    public Die()
+    {
+        faceValue = 1;
+    }
+
+    public int roll()
+    {
+        faceValue = (int) (Math.random() * MAX) + 1;
+        return faceValue;
+    }
+
+    public void setFaceValue(int value)
+    {
+        faceValue = value;
+    }
+
+    public int getFaceValue()
+    {
+        return faceValue;
+    }
+
+    public String toString()
+    {
+        String result = Integer.toString(faceValue);
+        return result;
+    }
+}

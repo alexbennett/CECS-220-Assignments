@@ -1,0 +1,102 @@
+/* Name Generator */
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class UsernameGenerator
+{
+    public static void main(String[] args)
+    {
+        // Define variables
+        String fName, lName, username;
+        Random rand = new Random();
+
+        // Initiate scanner for accepting values
+        Scanner scanner = new Scanner(System.in);
+
+        // Accept the values from the user
+        System.out.print("Please enter your first name: ");
+        fName = scanner.nextLine();
+        System.out.print("Thanks! Please enter you last name: ");
+        lName = scanner.nextLine();
+
+        // Set to lowercase
+        fName = fName.toLowerCase();
+        lName = lName.toLowerCase();
+
+        // Generate random number
+        int number = rand.nextInt(90) + 10;
+
+        // Generate username
+        username = "" + fName.charAt(0) + lName.charAt(0) + lName.charAt(1) + lName.charAt(2) + lName.charAt(3) + lName.charAt(4) + number;
+
+        // Done! Print it all out
+        System.out.println("All done! Your new username is " + username);
+    }
+}
+
+/* Area Calculator */
+
+import java.text.DecimalFormat;
+import java.util.Scanner;
+
+public class AreaCalculator
+{
+    public static void main(String[] args)
+    {
+        // Create variables
+        double a, b, c, s, area;
+
+        // Initialize scanner
+        Scanner scanner = new Scanner(System.in);
+
+        // Ask for side lengths
+        System.out.print("Please enter the length of side A: ");
+        a = scanner.nextInt();
+        System.out.print("Please enter the length of side B: ");
+        b = scanner.nextInt();
+        System.out.print("Please enter the length of side C: ");
+        c = scanner.nextInt();
+
+        // Perform calculations
+        s = (a + b + c) / 2;
+        area = Math.sqrt(s * (s-a) * (s-b) * (s-c));
+
+        // Format
+        DecimalFormat format = new DecimalFormat("#.###");
+
+        // Print the area
+        System.out.println("The area of the triangle you defined is " + format.format(area) + "!");
+    }
+
+}
+
+/* Number Generator */
+
+import java.util.Random;
+
+public class NumberGenerator
+{
+    public static void main(String[] args)
+    {
+        // Create variables
+        double number, cos, sin, tan;
+
+        // Generate number
+        Random rand = new Random();
+        number = rand.nextInt(21) + 20; // range from 20 to 40
+
+        // Trig
+        cos = Math.cos(number);
+        sin = Math.sin(number);
+        tan = Math.tan(number);
+
+        // Output
+        System.out.println("Done --------- (assumes radians) ---");
+        System.out.println(" number:    " + (int) number); // cast as int to look pretty
+        System.out.println(" sin:       " + sin);
+        System.out.println(" cos:       " + cos);
+        System.out.println(" tan:       " + tan);
+        System.out.println("------------------------------------");
+    }
+}
