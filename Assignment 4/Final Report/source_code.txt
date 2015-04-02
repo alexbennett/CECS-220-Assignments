@@ -1,0 +1,598 @@
+/* ---------------------------------------------
+ * Problem #1 (7.3)
+ * ---------------------------------------------
+ */
+
+package problem_1;
+
+public class Student
+{
+	private String firstName, lastName;
+	private Address homeAddress, schoolAddress;
+	private double testScores[];
+
+	// -----------------------------------------------------------------
+	// Constructor: Sets up this student with the specified values.
+	// -----------------------------------------------------------------
+	public Student(String first, String last, Address home, Address school)
+	{
+		firstName = first;
+		lastName = last;
+		homeAddress = home;
+		schoolAddress = school;
+
+		testScores = new double[]{0, 0, 0};
+	}
+
+	public void setTestScore(int testNumber, double testScore)
+	{
+		if(testNumber != 1 && testNumber != 2 && testNumber != 3) return;
+		testScores[testNumber - 1] = testScore;
+	}
+
+	public double average()
+	{
+		double average = 0;
+		average += testScores[0] + testScores[1] + testScores[2];
+		average /= 3;
+		return average;
+	}
+
+	// -----------------------------------------------------------------
+	// Returns a string description of this Student object.
+	// -----------------------------------------------------------------
+	public String toString()
+	{
+		String result;
+		result = firstName + " " + lastName + "\n";
+		result += "Home Address:\n" + homeAddress + "\n";
+		result += "School Address:\n" + schoolAddress + "\n";
+		result += "Test Scores: " + testScores[0] + ", " + testScores[1] + ", " + testScores[2] + "\n";
+		result += "Test Average: " + average() + "\n";
+		return result;
+	}
+}
+
+package problem_1;
+
+public class College
+{
+    public static void main(String... args)
+    {
+        // Create the course
+        Course course = new Course("CECS 220");
+
+        // Create the students
+        Student student1 = new Student
+                (
+                        "Alex",
+                        "Bennett",
+                        new Address("123 Circle Drive", "Louisville", "KY", 40208),
+                        new Address("123 Circle Drive", "Louisville", "KY", 40208)
+                );
+
+        Student student2 = new Student
+                (
+                        "Sam",
+                        "Fox",
+                        new Address("123 Circle Drive", "Louisville", "KY", 40208),
+                        new Address("123 Circle Drive", "Louisville", "KY", 40208)
+                );
+
+        Student student3 = new Student
+                (
+                        "Cole",
+                        "Galloway",
+                        new Address("123 Circle Drive", "Louisville", "KY", 40208),
+                        new Address("123 Circle Drive", "Louisville", "KY", 40208)
+                );
+
+        Student student4 = new Student
+                (
+                        "Quenton",
+                        "Woolfolk",
+                        new Address("123 Circle Drive", "Louisville", "KY", 40208),
+                        new Address("123 Circle Drive", "Louisville", "KY", 40208)
+                );
+
+        Student student5 = new Student
+                (
+                        "Stella",
+                        "Nova",
+                        new Address("123 Circle Drive", "Louisville", "KY", 40208),
+                        new Address("123 Circle Drive", "Louisville", "KY", 40208)
+                );
+
+        // Add grades
+        student1.setTestScore(1, 100);
+        student1.setTestScore(2, 100);
+        student1.setTestScore(3, 100);
+
+        student2.setTestScore(1, 100);
+        student2.setTestScore(2, 100);
+        student2.setTestScore(3, 100);
+
+        student3.setTestScore(1, 65);
+        student3.setTestScore(2, 74);
+        student3.setTestScore(3, 54);
+
+        student4.setTestScore(1, 87);
+        student4.setTestScore(2, 78);
+        student4.setTestScore(3, 44);
+
+        student5.setTestScore(1, 97);
+        student5.setTestScore(2, 85);
+        student5.setTestScore(3, 100);
+
+        // Add students to course
+        course.addStudent(student1);
+        course.addStudent(student2);
+        course.addStudent(student3);
+        course.addStudent(student4);
+        course.addStudent(student5);
+
+        // Print information
+        course.average();
+        course.roll();
+    }
+}
+
+package problem_1;
+
+import java.util.ArrayList;
+
+public class Course
+{
+    String courseName;
+    ArrayList<Student> students;
+
+    public Course(String courseName)
+    {
+        // Set course name
+        this.courseName = courseName;
+
+        // Create student ArrayList
+        students = new ArrayList<Student>();
+    }
+
+    public void addStudent(Student student)
+    {
+        students.add(student);
+    }
+
+    public void average()
+    {
+        double average = 0;
+
+        for(Student student : students)
+        {
+            average += student.average();
+        }
+
+        average /= students.size();
+
+        System.out.println("\n Course grade average: " + average);
+    }
+
+    public void roll()
+    {
+        for(Student student : students)
+        {
+            System.out.println("\n" + student.toString());
+        }
+    }
+}
+
+package problem_1;
+
+public class Student
+{
+	private String firstName, lastName;
+	private Address homeAddress, schoolAddress;
+	private double testScores[];
+
+	// -----------------------------------------------------------------
+	// Constructor: Sets up this student with the specified values.
+	// -----------------------------------------------------------------
+	public Student(String first, String last, Address home, Address school)
+	{
+		firstName = first;
+		lastName = last;
+		homeAddress = home;
+		schoolAddress = school;
+
+		testScores = new double[]{0, 0, 0};
+	}
+
+	public void setTestScore(int testNumber, double testScore)
+	{
+		if(testNumber != 1 && testNumber != 2 && testNumber != 3) return;
+		testScores[testNumber - 1] = testScore;
+	}
+
+	public double average()
+	{
+		double average = 0;
+		average += testScores[0] + testScores[1] + testScores[2];
+		average /= 3;
+		return average;
+	}
+
+	// -----------------------------------------------------------------
+	// Returns a string description of this Student object.
+	// -----------------------------------------------------------------
+	public String toString()
+	{
+		String result;
+		result = firstName + " " + lastName + "\n";
+		result += "Home Address:\n" + homeAddress + "\n";
+		result += "School Address:\n" + schoolAddress + "\n";
+		result += "Test Scores: " + testScores[0] + ", " + testScores[1] + ", " + testScores[2] + "\n";
+		result += "Test Average: " + average() + "\n";
+		return result;
+	}
+}
+
+/* ---------------------------------------------
+ * Problem #2 (7.5)
+ * ---------------------------------------------
+ */
+
+package problem_2;
+
+interface Priority
+{
+    enum Level { HIGH, MEDIUM, LOW }
+
+    void setPriority(Level priorityLevel);
+    Level getPriority();
+}
+
+package problem_2;
+
+public class Task implements Priority
+{
+    String taskName;
+    String taskDescription;
+    Priority.Level priorityLevel;
+
+    public Task(String taskName, String taskDescription)
+    {
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
+    }
+
+    public String getName()
+    {
+        return taskName;
+    }
+
+    public String getDescription()
+    {
+        return taskDescription;
+    }
+
+    public void setPriority(Level priorityLevel)
+    {
+        this.priorityLevel = priorityLevel;
+    }
+
+    @Override
+    public Level getPriority()
+    {
+        return priorityLevel;
+    }
+}
+
+package problem_2;
+
+import java.util.ArrayList;
+
+public class TaskList
+{
+    public static void main(String... args)
+    {
+        // Create task list
+        ArrayList<Task> tasks = new ArrayList<Task>();
+
+        // Create tasks
+        Task task1 = new Task("Water the plants", "Water the plants fool");
+        task1.setPriority(Priority.Level.HIGH);
+
+        Task task2 = new Task("Pick up the kids", "Don't forget those kiddos");
+        task2.setPriority(Priority.Level.LOW);
+
+        Task task3 = new Task("Mow the lawn", "Better find the scissors");
+        task3.setPriority(Priority.Level.MEDIUM);
+
+        // Add to list
+        tasks.add(task1);
+        tasks.add(task2);
+        tasks.add(task3);
+
+        // Display information
+        for(Task task : tasks)
+        {
+            System.out.println("Name: " + task.getName());
+            System.out.println("Description: " + task.getDescription());
+            System.out.println("Priority: " + task.getPriority() + "\n");
+        }
+    }
+}
+
+/* ---------------------------------------------
+ * Problem #3 (7.10)
+ * ---------------------------------------------
+ */
+
+package problem_3;
+
+import javax.swing.*;
+
+public class PigLatin
+{
+    //-----------------------------------------------------------------
+    // Reads sentences and translates them into Pig Latin.
+    //-----------------------------------------------------------------
+    public static void main (String[] args)
+    {
+        JFrame frame = new JFrame("English to PigLatin");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        TranslatorPanel panel = new TranslatorPanel();
+        frame.getContentPane().add(panel);
+        frame.pack();
+        frame.setVisible(true);
+    }
+}
+
+//********************************************************************
+// PigLatinTranslator.java Author: Lewis/Loftus
+//
+// Represents a translator from English to Pig Latin. Demonstrates
+// method decomposition.
+//********************************************************************
+package problem_3;
+
+import java.util.Scanner;
+
+public class PigLatinTranslator
+{
+	// -----------------------------------------------------------------
+	// Translates a sentence of words into Pig Latin.
+	// -----------------------------------------------------------------
+	public static String translate(String sentence)
+	{
+		String result = "";
+		sentence = sentence.toLowerCase();
+		Scanner scan = new Scanner(sentence);
+		while(scan.hasNext())
+		{
+			result += translateWord(scan.next());
+			result += " ";
+		}
+		return result;
+	}
+
+	// -----------------------------------------------------------------
+	// Translates one word into Pig Latin. If the word begins with a
+	// vowel, the suffix "yay" is appended to the word. Otherwise,
+	// the first letter or two are moved to the end of the word,
+	// and "ay" is appended.
+	// -----------------------------------------------------------------
+	private static String translateWord(String word)
+	{
+		String result = "";
+		if(beginsWithVowel(word)) result = word + "yay";
+		else if(beginsWithBlend(word)) result = word.substring(2) + word.substring(0, 2) + "ay";
+		else result = word.substring(1) + word.charAt(0) + "ay";
+		return result;
+	}
+
+	// -----------------------------------------------------------------
+	// Determines if the specified word begins with a vowel.
+	// -----------------------------------------------------------------
+	private static boolean beginsWithVowel(String word)
+	{
+		String vowels = "aeiou";
+		char letter = word.charAt(0);
+		return(vowels.indexOf(letter) != -1);
+	}
+
+	// -----------------------------------------------------------------
+	// Determines if the specified word begins with a particular
+	// two-character consonant blend.
+	// -----------------------------------------------------------------
+	private static boolean beginsWithBlend(String word)
+	{
+		return(word.startsWith("bl") || word.startsWith("sc") || word.startsWith("br") || word.startsWith("sh") || word.startsWith("ch") || word.startsWith("sk") || word.startsWith("cl") || word.startsWith("sl") || word.startsWith("cr") || word.startsWith("sn") || word.startsWith("dr") || word.startsWith("sm") || word.startsWith("dw") || word.startsWith("sp") || word.startsWith("fl") || word.startsWith("sq") || word.startsWith("fr") || word.startsWith("st") || word.startsWith("gl") || word.startsWith("sw") || word.startsWith("gr") || word.startsWith("th") || word.startsWith("kl") || word.startsWith("tr") || word.startsWith("ph") || word.startsWith("tw") || word.startsWith("pl") || word.startsWith("wh") || word.startsWith("pr") || word.startsWith("wr"));
+	}
+}
+
+package problem_3;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class TranslatorPanel extends JPanel
+{
+    private JButton translateButton;
+    private JLabel inputLabel, outputLabel, resultLabel;
+    private JTextField toTranslate;
+
+    public TranslatorPanel()
+    {
+        // Create components
+        translateButton = new JButton("Translate");
+        inputLabel = new JLabel("Enter sentence in English (no puncuation):");
+        outputLabel = new JLabel("Sentence translated to PigLatin: ");
+        resultLabel = new JLabel("---");
+        toTranslate = new JTextField(10);
+
+        // Add listeners
+        TranslationListener listener = new TranslationListener();
+        translateButton.addActionListener(listener);
+        toTranslate.addActionListener(listener);
+
+        // Add to view
+        add(inputLabel);
+        add(toTranslate);
+        add(translateButton);
+        add(outputLabel);
+        add(resultLabel);
+
+        // Finish render
+        setPreferredSize(new Dimension(475, 75));
+        setBackground(Color.white);
+    }
+
+    private class TranslationListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent event)
+        {
+            resultLabel.setText(PigLatinTranslator.translate(toTranslate.getText()));
+        }
+    }
+}
+
+/* ---------------------------------------------
+ * Problem #4 (7.13)
+ * ---------------------------------------------
+ */
+
+package problem_4;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class Interface
+{
+    public static void main(String... args)
+    {
+        // Create frame and defaults
+        JFrame frame = new JFrame("Phone Dialer");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Set size
+        frame.setPreferredSize(new Dimension(400, 400));
+
+        // Add elements
+        frame.getContentPane().add(new Phone());
+
+        // Display
+        frame.pack();
+        frame.setVisible(true);
+    }
+}
+
+package problem_4;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class Keypad extends JPanel
+{
+    public Keypad()
+    {
+        setLayout(new GridLayout(4, 3));
+        setBackground(Color.darkGray);
+
+        // Create buttons
+        JButton b1 = new JButton("1");
+        JButton b2 = new JButton("2");
+        JButton b3 = new JButton("3");
+        JButton b4 = new JButton("4");
+        JButton b5 = new JButton("5");
+        JButton b6 = new JButton("6");
+        JButton b7 = new JButton("7");
+        JButton b8 = new JButton("8");
+        JButton b9 = new JButton("9");
+        JButton b10 = new JButton("*");
+        JButton b11 = new JButton("0");
+        JButton b12 = new JButton("#");
+
+        // Attach listeners
+        b1.addActionListener(new Phone.ButtonListener());
+        b2.addActionListener(new Phone.ButtonListener());
+        b3.addActionListener(new Phone.ButtonListener());
+        b4.addActionListener(new Phone.ButtonListener());
+        b5.addActionListener(new Phone.ButtonListener());
+        b6.addActionListener(new Phone.ButtonListener());
+        b7.addActionListener(new Phone.ButtonListener());
+        b8.addActionListener(new Phone.ButtonListener());
+        b9.addActionListener(new Phone.ButtonListener());
+        b10.addActionListener(new Phone.ButtonListener());
+        b11.addActionListener(new Phone.ButtonListener());
+        b12.addActionListener(new Phone.ButtonListener());
+
+        // Add to panel
+        add(b1);
+        add(b2);
+        add(b3);
+        add(b4);
+        add(b5);
+        add(b6);
+        add(b7);
+        add(b8);
+        add(b9);
+        add(b10);
+        add(b11);
+        add(b12);
+    }
+}
+
+package problem_4;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Phone extends JPanel
+{
+    private static JLabel display;
+    private JButton clearDisplay;
+    private Keypad keypad;
+
+    public Phone()
+    {
+        // Create elements
+        display = new JLabel(" ");
+        clearDisplay = new JButton("Clear");
+        keypad = new Keypad(this);
+
+        // Setup layout
+        setLayout(new BorderLayout());
+        Border border = BorderFactory.createLineBorder(Color.white, 5);
+        display.setBorder(border);
+        keypad.setBorder(border);
+
+        // Attach listener
+        clearDisplay.addActionListener(new ButtonListener());
+
+        // Add elements
+        add(display, BorderLayout.NORTH);
+        add(keypad, BorderLayout.CENTER);
+        add(clearDisplay, BorderLayout.EAST);
+    }
+
+    public static class ButtonListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent event)
+        {
+            if(event.getActionCommand().toLowerCase().equals("clear"))
+            {
+                // Reset display
+                display.setText(" ");
+            }
+            else
+            {
+                // Add to the dialed string
+                String currentlyDialed = display.getText();
+                display.setText(currentlyDialed + event.getActionCommand());
+            }
+        }
+    }
+}
