@@ -1,0 +1,706 @@
+/* ---------------------------------------------
+ * Problem #1 (9.8)
+ * ---------------------------------------------
+ */
+ 
+package problem_1;
+
+import javax.swing.*;
+
+public class AnimatedLine
+{
+	public static void main(String... args)
+	{
+		JFrame frame = new JFrame("Animated Line");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		frame.getContentPane().add(new LinePanel());
+		frame.pack();
+		frame.setVisible(true);
+	}
+}
+
+package problem_1;
+
+import java.awt.*;
+
+public class HorizontalLine
+{
+	private Color color;
+	private Point location;
+	private int length;
+
+	public HorizontalLine(Point location, int length, Color color)
+	{
+		this.location = location;
+		this.length = length;
+		this.color = color;
+	}
+
+	public void setLength(int length)
+	{
+		this.length = length;
+	}
+
+	public void translateLineX(int amount)
+	{
+		location.translate(amount, 0);
+	}
+
+	public Point getLocation()
+	{
+		return location;
+	}
+
+	public int getLength()
+	{
+		return length;
+	}
+
+	public void drawLine(Graphics graphics)
+	{
+		Color previousColor = graphics.getColor();
+
+		graphics.setColor(color);
+		graphics.drawLine(location.x, location.y, location.x + length, location.y);
+
+		graphics.setColor(previousColor);
+	}
+}
+
+package problem_1;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
+
+public class LinePanel extends JPanel
+{
+	private final int WIDTH = 300, HEIGHT = 200;
+	private final int DELAY = 20;
+
+	// Line properties
+	private final int LENGTH = 50;
+	private final int X_MOVE_AMOUNT = 3;
+	private final int STARTING_POINT_X = 5;
+	private final int ENDING_POINT_X = 295;
+	private final int POSITION_Y = 100;
+	private final Color color1 = Color.white, color2 = Color.red;
+
+	private Timer timer;
+	private HorizontalLine line1, line2;
+
+	public LinePanel()
+	{
+		timer = new Timer(DELAY, new LineListener());
+
+		line1 = new HorizontalLine(new Point(STARTING_POINT_X, POSITION_Y), LENGTH, color1);
+		line2 = new HorizontalLine(new Point(WIDTH / 2, POSITION_Y), 0, color2);
+
+		setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		setBackground(Color.black);
+		timer.start();
+	}
+
+	public void paintComponent(Graphics graphics)
+	{
+		super.paintComponent(graphics);
+
+		// Draw vertical line
+		graphics.setColor(Color.green);
+		graphics.drawLine(WIDTH / 2, 0, WIDTH / 2, HEIGHT);
+
+		// Handle line animation
+		if(line1.getLength() > 0) line1.drawLine(graphics);
+		if(line2.getLength() > 0) line2.drawLine(graphics);
+	}
+
+	private class LineListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+			if(line2.getLocation().x + line2.getLength() >= ENDING_POINT_X) return;
+
+			if(line2.getLength() >= LENGTH)
+			{
+				line2.translateLineX(X_MOVE_AMOUNT);
+			}
+
+			if(line1.getLocation().x + line1.getLength() >= WIDTH / 2)
+			{
+				if(line1.getLength() > 0) line1.setLength(line1.getLength() - X_MOVE_AMOUNT);
+				if(line2.getLength() < LENGTH) line2.setLength(line2.getLength() + X_MOVE_AMOUNT);
+			}
+
+			line1.translateLineX(X_MOVE_AMOUNT);
+
+			repaint();
+		}
+	}
+}
+ 
+ /* ---------------------------------------------
+ * Problem #2 (9.10)
+ * ---------------------------------------------
+ */
+ 
+package problem_2;
+
+import java.awt.*;
+
+import javax.swing.*;
+
+public class Stopwatch
+{
+	public static void main(String... args)
+	{
+		JFrame frame = new JFrame("Stopwatch");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setPreferredSize(new Dimension(300, 200));
+		frame.getContentPane().add(new StopwatchPanel());
+		frame.pack();
+		frame.setVisible(true);
+	}
+}
+
+package problem_2;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
+
+public class StopwatchPanel extends JPanel
+{
+	// Components
+	private JLabel display;
+	private JButton startButton, stopButton, resetButton;
+	private Timer timer;
+	private int hours, minutes, seconds;
+
+	public StopwatchPanel()
+	{
+		// Create components
+		display = new JLabel("0:00:00");
+		display.setFont(new Font("SansSerif", Font.BOLD, 50));
+		display.setHorizontalAlignment(JTextField.CENTER);
+		startButton = new JButton("Start");
+		stopButton = new JButton("Stop");
+		resetButton = new JButton("Reset");
+
+		// Create timer
+		timer = new Timer(1000, new TimerListener());
+		timer.setInitialDelay(0);
+
+		// Create and attach listener
+		ButtonListener listener = new ButtonListener();
+		startButton.addActionListener(listener);
+		stopButton.addActionListener(listener);
+		resetButton.addActionListener(listener);
+
+		// Render graphics
+		setLayout(new BorderLayout());
+		setBackground(Color.lightGray);
+
+		// Add components
+		add(display, BorderLayout.NORTH);
+		add(startButton, BorderLayout.WEST);
+		add(stopButton, BorderLayout.CENTER);
+		add(resetButton, BorderLayout.EAST);
+	}
+
+	private void incrementTime()
+	{
+		seconds++;
+
+		if(seconds == 60)
+		{
+			minutes++;
+			seconds = 0;
+		}
+
+		if(minutes == 60)
+		{
+			hours++;
+			minutes = 0;
+		}
+	}
+
+	private void updateDisplay()
+	{
+		display.setText(hours + ":" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+	}
+
+	private class ButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+			if(event.getActionCommand().toLowerCase().equals("start"))
+			{
+				// Start timing
+				timer.start();
+			}
+			else if(event.getActionCommand().toLowerCase().equals("stop"))
+			{
+				// Stop timing
+				timer.stop();
+			}
+			else if(event.getActionCommand().toLowerCase().equals("reset"))
+			{
+				// Stop timer
+				timer.stop();
+
+				// Reset count and display
+				hours = 0;
+				minutes = 0;
+				seconds = 0;
+				updateDisplay();
+			}
+		}
+	}
+
+	private class TimerListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+			updateDisplay();
+			incrementTime();
+		}
+	}
+}
+ 
+ /* ---------------------------------------------
+ * Problem #3 (10.3)
+ * ---------------------------------------------
+ */
+ 
+ package problem_3;
+
+public class Event
+{
+	public static void main(String... args)
+	{
+		Speaker doctor = new Guest("Dr. Doctor");
+		Speaker dog = new Guest("Spot");
+		Speaker president = new Guest("Barack Obama");
+
+		doctor.announce("Cancer has been cured!");
+		((Guest) doctor).introduce((Guest) dog);
+
+		dog.announce("...woof");
+		((Guest) dog).introduce((Guest) president);
+
+		president.announce("The future rewards those who press on. I don't have time to feel sorry for myself. I don't have time to complain. I'm going to press on.");
+	}
+
+	public static class Guest implements Speaker
+	{
+		private String name, announcement;
+
+		public Guest(String name)
+		{
+			this.name = name;
+		}
+
+		public void introduce(Guest guest)
+		{
+			System.out.println("Now introducing " + guest.getName() + "!\n");
+		}
+
+		public String getName()
+		{
+			return name;
+		}
+
+		public void speak()
+		{
+			System.out.println("\"" + announcement + "\"");
+		}
+
+		public void announce(String str)
+		{
+			announcement = str;
+			speak();
+		}
+	}
+
+	public interface Speaker
+	{
+		void speak();
+
+		void announce(String str);
+	}
+}
+
+ 
+ /* ---------------------------------------------
+ * Problem #4 (10.5)
+ * ---------------------------------------------
+ */
+ 
+ //********************************************************************
+// DVD.java Author: Lewis/Loftus
+//
+// Represents a DVD video disc.
+//********************************************************************
+package problem_4;
+
+import java.text.NumberFormat;
+
+public class DVD
+{
+	private String title, director;
+	private int year;
+	private double cost;
+	private boolean bluray;
+
+	// -----------------------------------------------------------------
+	// Creates a new DVD with the specified information.
+	// -----------------------------------------------------------------
+	public DVD(String title, String director, int year, double cost, boolean bluray)
+	{
+		this.title = title;
+		this.director = director;
+		this.year = year;
+		this.cost = cost;
+		this.bluray = bluray;
+	}
+
+	public String getTitle()
+	{
+		return title;
+	}
+
+	// -----------------------------------------------------------------
+	// Returns a string description of this DVD.
+	// -----------------------------------------------------------------
+	public String toString()
+	{
+		NumberFormat fmt = NumberFormat.getCurrencyInstance();
+		String description;
+		description = fmt.format(cost) + "\t" + year + "\t";
+		description += title + "\t" + director;
+		if(bluray) description += "\t" + "Blu-ray";
+		return description;
+	}
+}
+
+//********************************************************************
+// DVDCollection.java Author: Lewis/Loftus
+//
+// Represents a collection of DVD movies.
+//********************************************************************
+package problem_4;
+
+import java.text.NumberFormat;
+import java.util.TreeMap;
+
+public class DVDCollection
+{
+	private DVD[] collection;
+	private int count;
+	private double totalCost;
+
+	// -----------------------------------------------------------------
+	// Constructor: Creates an initially empty collection.
+	// -----------------------------------------------------------------
+	public DVDCollection()
+	{
+		collection = new DVD[100];
+		count = 0;
+		totalCost = 0.0;
+	}
+
+	// -----------------------------------------------------------------
+	// Adds a DVD to the collection, increasing the size of the
+	// collection array if necessary.
+	// -----------------------------------------------------------------
+	public void addDVD(String title, String director, int year, double cost, boolean bluray)
+	{
+		if(count == collection.length) increaseSize();
+		collection[count] = new DVD(title, director, year, cost, bluray);
+		totalCost += cost;
+		count++;
+
+		// Sort array
+		TreeMap<String, DVD> movies = new TreeMap<String, DVD>();
+
+		for(int i = 0; i < count; i++)
+		{
+			movies.put(collection[i].getTitle(), collection[i]);
+		}
+
+		for(int i = 0; i < count; i++)
+		{
+			collection[i] = (DVD) movies.values().toArray()[i];
+		}
+	}
+
+	// -----------------------------------------------------------------
+	// Returns a report describing the DVD collection.
+	// -----------------------------------------------------------------
+	public String toString()
+	{
+		NumberFormat fmt = NumberFormat.getCurrencyInstance();
+		String report = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+		report += "My DVD Collection\n\n";
+		report += "Number of DVDs: " + count + "\n";
+		report += "Total cost: " + fmt.format(totalCost) + "\n";
+		report += "Average cost: " + fmt.format(totalCost / count);
+		report += "\n\nDVD List:\n\n";
+		for(int dvd = 0; dvd < count; dvd++)
+			report += collection[dvd].toString() + "\n";
+		return report;
+	}
+
+	// -----------------------------------------------------------------
+	// Increases the capacity of the collection by creating a
+	// larger array and copying the existing collection into it.
+	// -----------------------------------------------------------------
+	private void increaseSize()
+	{
+		DVD[] temp = new DVD[collection.length * 2];
+		for(int dvd = 0; dvd < collection.length; dvd++)
+			temp[dvd] = collection[dvd];
+		collection = temp;
+	}
+}
+
+//********************************************************************
+// Movies.java Author: Lewis/Loftus
+//
+// Demonstrates the use of an array of objects.
+//********************************************************************
+package problem_4;
+
+public class Movies
+{
+	// -----------------------------------------------------------------
+	// Creates a DVDCollection object and adds some DVDs to it. Prints
+	// reports on the status of the collection.
+	// -----------------------------------------------------------------
+	public static void main(String[] args)
+	{
+		DVDCollection movies = new DVDCollection();
+		movies.addDVD("The Godfather", "Francis Ford Coppola", 1972, 24.95, true);
+		movies.addDVD("District 9", "Neill Blomkamp", 2009, 19.95, false);
+		movies.addDVD("Iron Man", "Jon Favreau", 2008, 15.95, false);
+		movies.addDVD("All About Eve", "Joseph Mankiewicz", 1950, 17.50, false);
+		movies.addDVD("The Matrix", "Andy & Lana Wachowski", 1999, 19.95, true);
+		System.out.println(movies);
+		movies.addDVD("Iron Man 2", "Jon Favreau", 2010, 22.99, false);
+		movies.addDVD("Casablanca", "Michael Curtiz", 1942, 19.95, false);
+		System.out.println(movies);
+	}
+}
+ 
+ /* ---------------------------------------------
+ * Problem #5 (11.4)
+ * ---------------------------------------------
+ */
+ 
+ package problem_5;
+
+public class Business
+{
+	public static void main(String... args)
+	{
+		// Create new documents and display information
+		Document doc1, doc2, doc3;
+
+		try
+		{
+			doc1 = new Document("Document #1", "This is the description of document 1.", "U-4522");
+			doc2 = new Document("Document #2", "This is the description of document 2.", "P-3789");
+			doc3 = new Document("Document #3", "This is the description of document 3.", "X-0102");
+		}
+		catch(InvalidDocumentCodeException exception)
+		{
+			// Print error
+			System.out.println("ERROR: " + exception.getMessage());
+
+			// Terminate
+			return;
+		}
+	}
+}
+
+package problem_5;
+
+public class Document
+{
+	String name, description, designation;
+
+	public Document(String name, String description, String designation) throws InvalidDocumentCodeException
+	{
+		if(designation.startsWith("U") || designation.startsWith("C") || designation.startsWith("P"))
+		{
+			this.name = name;
+			this.description = description;
+			this.designation = designation;
+		}
+		else
+		{
+			throw new InvalidDocumentCodeException("No valid document designation found for document named \"" + name + "\".");
+		}
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public String getDescription()
+	{
+		return description;
+	}
+
+	public String getDesignation()
+	{
+		return designation;
+	}
+}
+
+package problem_5;
+
+public class InvalidDocumentCodeException extends Exception
+{
+	public InvalidDocumentCodeException(String message)
+	{
+		super(message);
+	}
+}
+
+ 
+ /* ---------------------------------------------
+ * Problem #6 (8.19)
+ * ---------------------------------------------
+ */
+ 
+ //********************************************************************
+// RubberLines.java Author: Lewis/Loftus
+//
+// Demonstrates mouse events and rubberbanding.
+//********************************************************************
+package problem_6;
+
+import javax.swing.*;
+
+public class RubberLines
+{
+	// -----------------------------------------------------------------
+	// Creates and displays the application frame.
+	// -----------------------------------------------------------------
+	public static void main(String[] args)
+	{
+		JFrame frame = new JFrame("Rubber Lines");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().add(new RubberLinesPanel());
+		frame.pack();
+		frame.setVisible(true);
+	}
+}
+
+//********************************************************************
+// RubberLinesPanel.java Author: Lewis/Loftus
+//
+// Represents the primary drawing panel for the RubberLines program.
+//********************************************************************
+package problem_6;
+
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.*;
+
+public class RubberLinesPanel extends JPanel
+{
+	private Point tempPoint1, tempPoint2;
+	private Map<Point, Point> points;
+
+	// -----------------------------------------------------------------
+	// Constructor: Sets up this panel to listen for mouse events.
+	// -----------------------------------------------------------------
+	public RubberLinesPanel()
+	{
+		LineListener listener = new LineListener();
+		points = new HashMap<Point, Point>();
+		addMouseListener(listener);
+		addMouseMotionListener(listener);
+		setBackground(Color.black);
+		setPreferredSize(new Dimension(400, 200));
+	}
+
+	// -----------------------------------------------------------------
+	// Draws the current line from the initial mouse-pressed point to
+	// the current position of the mouse.
+	// -----------------------------------------------------------------
+	public void paintComponent(Graphics page)
+	{
+		super.paintComponent(page);
+		page.setColor(Color.yellow);
+
+		for(Map.Entry<Point, Point> clickPoint : points.entrySet())
+		{
+			page.drawLine(clickPoint.getKey().x, clickPoint.getKey().y, clickPoint.getValue().x, clickPoint.getValue().y);
+		}
+	}
+
+	// *****************************************************************
+	// Represents the listener for all mouse events.
+	// *****************************************************************
+	private class LineListener implements MouseListener, MouseMotionListener
+	{
+		// --------------------------------------------------------------
+		// Captures the initial position at which the mouse button is
+		// pressed.
+		// --------------------------------------------------------------
+		public void mousePressed(MouseEvent event)
+		{
+			tempPoint1 = event.getPoint();
+		}
+
+		// --------------------------------------------------------------
+		// Gets the current position of the mouse as it is dragged and
+		// redraws the line to create the rubberband effect.
+		// --------------------------------------------------------------
+		public void mouseDragged(MouseEvent event)
+		{}
+
+		// --------------------------------------------------------------
+		// Provide empty definitions for unused event methods.
+		// --------------------------------------------------------------
+		public void mouseClicked(MouseEvent event)
+		{}
+
+		public void mouseReleased(MouseEvent event)
+		{
+			tempPoint2 = event.getPoint();
+
+			// Store in map
+			points.put(tempPoint1, tempPoint2);
+
+			// Clear temporary points
+			tempPoint1 = null;
+			tempPoint2 = null;
+
+			repaint();
+		}
+
+		public void mouseEntered(MouseEvent event)
+		{}
+
+		public void mouseExited(MouseEvent event)
+		{}
+
+		public void mouseMoved(MouseEvent event)
+		{}
+	}
+}
